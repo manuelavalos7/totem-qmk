@@ -74,11 +74,18 @@ enum custom_keycodes { COLEMAK = SAFE_RANGE, QWERTY, LOWER, RAISE, ADJUST, OS_SW
 //
 const uint16_t PROGMEM esc_combo[] = {KC_S, KC_D, GUI_F, COMBO_END};
 const uint16_t PROGMEM enter_combo[] = {KC_J, KC_K, KC_L, COMBO_END};
-const uint16_t PROGMEM tab_combo[] = {KC_Q, KC_W, COMBO_END};
+const uint16_t PROGMEM tab_combo[] = {KC_E, KC_R, COMBO_END};
+const uint16_t PROGMEM f4_combo[] = {KC_Y, KC_U, COMBO_END};
+const uint16_t PROGMEM f5_combo[] = {KC_R, KC_T, COMBO_END};
+const uint16_t PROGMEM f11_combo[] = {KC_O, KC_P, COMBO_END};
+
 combo_t key_combos[] = {
     COMBO(esc_combo, KC_ESC),
     COMBO(enter_combo, KC_ENTER),
     COMBO(tab_combo, KC_TAB),
+    COMBO(f4_combo, KC_F4),
+    COMBO(f5_combo, KC_F5),
+    COMBO(f11_combo, KC_F11),
 };
 
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -99,7 +106,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
       │   TAB   │    Z    │    X    │    C    │    V    │    B    ││    N    │    M    │    ,    │    .    │    /    │   DEL   │
       └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                    │  ALT    │stky ctrl│   space ││ BSPC    │stky sft │  nextlay│
+                                    │  ALT    │   space │stky ctrl││ stky sft│  BSPC   │  nextlay│
                                     └─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┘*/
 
    [_BASE] = LAYOUT(
@@ -107,7 +114,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
               KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,      KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,
               KC_A,    KC_S,    KC_D,    GUI_F,    KC_G,      KC_H,     KC_J,    KC_K,    KC_L,    KC_SCLN,
     KC_TAB,  KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,      KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_DEL,
-                                  KC_LALT,  OSM(MOD_LCTL),    LT(_NUMB,KC_SPACE),    LT(_SYMB, KC_BSPC),   OSM(MOD_LSFT),    TO(_NUMB)
+                                  KC_LALT, LT(_NUMB,KC_SPACE), OSM(MOD_LCTL), OSM(MOD_LSFT), LT(_SYMB, KC_BSPC),    TO(_NUMB)
  ),
 
  /*
@@ -123,7 +130,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
       │ SCRNSHT │   END   │   PG↑   │  SAVE   │   PG↓   │    (    ││    )    │    1    │    2    │    3    │    *    │    ▼    │
       └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                    │    ▼    │    ▼    │    ▼    ││    ▼    │ ADJUST  │    0    │
+                                    │    ▼    │    ▼    │    ▼    ││    0    │   none  │   next  │
                                     └─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┘ */
 
    [_NUMB] = LAYOUT(
@@ -131,7 +138,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
               KC_F18,  KC_NUM,   KC_UP,    KC_EQL,   KC_LCBR,   KC_RCBR,  KC_7,    KC_8,    KC_9,    KC_PPLS,
               KC_QUOT,  KC_LEFT,  KC_DOWN,  KC_F11,  KC_F12,   KC_RBRC,  KC_4,    KC_5,    KC_6,    KC_MINS,
     SNAP,     KC_END,   KC_PGUP,  C(KC_S),  KC_PGDN,  KC_LPRN,   KC_RPRN,  KC_1,    KC_2,    KC_3,    KC_PAST,  _______,
-                                  TO(_BASE),  _______,  XXXXXXX,   _______,  KC_0,  TO(_SYMB)
+                                  TO(_BASE),  _______,  XXXXXXX,    KC_0, XXXXXXX,  TO(_SYMB)
  ),
 /*
 
@@ -140,23 +147,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      │ S Y M B O L                                     │      ╭╮╭╮╭╮╭╮
      └─────────────────────────────────────────────────┘      │╰╯╰╯╰╯│
                ┌─────────┬─────────┬─────────┬─────────┬──────╨──┐┌──╨──────┬─────────┬─────────┬─────────┬─────────┐
-       ╌┄┈┈───═╡    {    │    '    │    "    │    }    │    ?    ││    [    │    (    │    )    │    ]    │play/paus│
+       ╌┄┈┈───═╡    {    │    '    │    "    │    }    │    %    ││    [    │    (    │    )    │    ]    │play/paus│
                ├─────────┼─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┼─────────┤
                │    !    │    =    │    -    │    $    │    *    ││    left │   down  │   up    │   right │    ~    │
      ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
-     │   NONE  │    `    │    |    │    &    │    ^    │    \    ││    #    │  KC_BSPC│    %    │    @    │ vol down│vol up   │
+     │   NONE  │    `    │    |    │    &    │    ^    │    \    ││    #    │  KC_BSPC│    +    │    @    │ vol down│vol up   │
      └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                   │TO(_BASE)│    _    │  %      ││  NONE   │  NONE   │ TO(func)│
+                                   │TO(_BASE)│  space  │    _    ││  NONE   │  NONE   │ TO(func)│
                                    └─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┘*/
 
 
    [_SYMB] = LAYOUT(
+ 
  //╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷
-              KC_LCBR,  KC_QUOT,   KC_DQT,   KC_RBRC,  KC_QUES,   KC_LBRC,  KC_LPRN,  KC_RPRN, KC_RBRC,   XXXXXXX,
+              KC_LCBR,  KC_QUOT,   KC_DQT,   KC_RCBR,KC_PERCENT,  KC_LBRC,  KC_LPRN,  KC_RPRN, KC_RBRC,   KC_MPLY,
               KC_EXLM,   KC_EQL,   KC_MINS,   KC_DLR,  KC_ASTERISK, KC_LEFT,KC_DOWN,   KC_UP,  KC_RIGHT,  KC_TILD,
-    KC_MEDIA_NEXT_TRACK,  KC_GRAVE , KC_PIPE, KC_AMPERSAND,KC_CIRC,  KC_BACKSLASH,  KC_HASH,  KC_BSPC,  KC_PERCENT,  KC_AT,  KC_VOLD, KC_VOLU,
-                                  TO(_BASE), KC_UNDERSCORE,  KC_SPACE,   XXXXXXX,  XXXXXXX,  TO(_FUNC)
+    KC_MEDIA_NEXT_TRACK,  KC_GRAVE , KC_PIPE, KC_AMPERSAND,KC_CIRC,  KC_BACKSLASH,  KC_HASH,  KC_BSPC,  KC_PLUS,  KC_AT,  KC_VOLD, KC_VOLU,
+                                  TO(_BASE),  KC_SPACE, KC_UNDERSCORE,   XXXXXXX,  XXXXXXX,  TO(_FUNC)
  ),
+
  /*
       ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
 
